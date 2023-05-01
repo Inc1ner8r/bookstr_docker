@@ -7,10 +7,11 @@ app.use(cors());
 app.use(express.json());
 
 const db = mysql.createConnection({
-  host: "localhost",
-  user: "inciner8r",
+  host: "db",
+  user: "user",
   password: "password123@",
   database: "test",
+  port: 3306,
 });
 
 const query =
@@ -76,6 +77,6 @@ app.put("/books/:id", (req, res) => {
   });
 });
 
-app.listen(8800, () => {
+app.listen(8080, () => {
   console.log("Connected to backend.");
 });

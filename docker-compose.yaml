@@ -1,0 +1,48 @@
+version: "3.8"
+services:
+  db:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'test'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password123@'
+      MYSQL_ROOT_PASSWORD: 'password123@'
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - my-db:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
+  backend:
+    build:
+      dockerfile: Dockerfile
+      context: "./backend"
+    depends_on:
+      - db
+    volumes:
+      - /app/node_modules
+      - ./backend:/app
+    ports:
+      - '8080:8080'
+    expose:
+      - '8080'
+
+  client:
+    build:
+      context: "./client"
+      dockerfile: Dockerfile
+    volumes:
+      - /app/node_modules
+      - ./client:/app
+    ports:
+      - '3000:3000'
+    expose:
+      - '3000'
+
+volumes:
+  my-db:
+  db:
+
+
