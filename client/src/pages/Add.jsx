@@ -6,11 +6,11 @@ import { Link, useNavigate } from "react-router-dom";
 const Add = () => {
   const [book, setBook] = useState({
     title: "",
-    desc: "",
+    description: "",
     price: null,
     cover: "",
   });
-  const [error,setError] = useState(false)
+  const [error, setError] = useState(false);
 
   const navigate = useNavigate();
 
@@ -25,7 +25,7 @@ const Add = () => {
       navigate("/");
     } catch (err) {
       console.log(err);
-      setError(true)
+      setError(true);
     }
   };
 
@@ -42,7 +42,7 @@ const Add = () => {
         rows={5}
         type="text"
         placeholder="Book desc"
-        name="desc"
+        name="description"
         onChange={handleChange}
       />
       <input

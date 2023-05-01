@@ -5,11 +5,11 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 const Update = () => {
   const [book, setBook] = useState({
     title: "",
-    desc: "",
+    description: "",
     price: null,
     cover: "",
   });
-  const [error,setError] = useState(false)
+  const [error, setError] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -45,7 +45,7 @@ const Update = () => {
         rows={5}
         type="text"
         placeholder="Book desc"
-        name="desc"
+        name="description"
         onChange={handleChange}
       />
       <input

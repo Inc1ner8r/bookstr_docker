@@ -8,11 +8,14 @@ app.use(express.json());
 
 const db = mysql.createConnection({
   host: "localhost",
-  user: "root",
-  password: "Lamadev123",
+  user: "inciner8r",
+  password: "password123@",
   database: "test",
 });
 
+const query =
+  "CREATE TABLE IF NOT EXISTS books( id int auto_increment,title varchar(255),description varchar(255),price int,cover varchar(255),primary key(id));";
+db.query(query);
 app.get("/", (req, res) => {
   res.json("hello");
 });
@@ -29,11 +32,12 @@ app.get("/books", (req, res) => {
 });
 
 app.post("/books", (req, res) => {
-  const q = "INSERT INTO books(`title`, `desc`, `price`, `cover`) VALUES (?)";
+  const q =
+    "INSERT INTO books(`title`, `description`, `price`, `cover`) VALUES (?)";
 
   const values = [
     req.body.title,
-    req.body.desc,
+    req.body.description,
     req.body.price,
     req.body.cover,
   ];
@@ -56,16 +60,17 @@ app.delete("/books/:id", (req, res) => {
 
 app.put("/books/:id", (req, res) => {
   const bookId = req.params.id;
-  const q = "UPDATE books SET `title`= ?, `desc`= ?, `price`= ?, `cover`= ? WHERE id = ?";
+  const q =
+    "UPDATE books SET `title`= ?, `description`= ?, `price`= ?, `cover`= ? WHERE id = ?";
 
   const values = [
     req.body.title,
-    req.body.desc,
+    req.body.description,
     req.body.price,
     req.body.cover,
   ];
 
-  db.query(q, [...values,bookId], (err, data) => {
+  db.query(q, [...values, bookId], (err, data) => {
     if (err) return res.send(err);
     return res.json(data);
   });
