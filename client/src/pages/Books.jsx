@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import "./books.scss";
 
 const Books = () => {
   const [books, setBooks] = useState([]);
@@ -31,8 +32,8 @@ const Books = () => {
   };
 
   return (
-    <div>
-      <h1>Lama Book Shop</h1>
+    <div className="wrapper">
+      <div className="header">Book Store</div>
       <div className="books">
         {books.map((book) => (
           <div key={book.id} className="book">
