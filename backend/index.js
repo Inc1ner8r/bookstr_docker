@@ -17,6 +17,9 @@ const db = mysql.createConnection({
 const query =
   "CREATE TABLE IF NOT EXISTS books( id int auto_increment,title varchar(255),description varchar(255),price int,cover varchar(255),primary key(id));";
 db.query(query);
+const userQuery =
+  "CREATE TABLE IF NOT EXISTS users( id int auto_increment,name varchar(255),username varchar(255),email varchar(255),password varchar(255),primary key(id));";
+db.query(userQuery);
 app.get("/", (req, res) => {
   res.json("hello");
 });
@@ -44,6 +47,32 @@ app.post("/books", (req, res) => {
   ];
 
   db.query(q, [values], (err, data) => {
+    if (err) return res.send(err);
+    return res.json(data);
+  });
+});
+
+app.post("/register", (req, res) => {
+  const q =
+    "INSERT INTO users(`name`, `username`, `email`, `password`) VALUES (?)";
+
+  const values = [
+    req.body.name,
+    req.body.username,
+    req.body.email,
+    req.body.password,
+  ];
+
+  db.query(q, [values], (err, data) => {
+    if (err) return res.send(err);
+    return res.json(data);
+  });
+});
+
+app.post("/login", (req, res) => {
+  const q = "SELECT * FROM users WHERE username = ? ";
+
+  db.query(q, [req.body.username], (err, data) => {
     if (err) return res.send(err);
     return res.json(data);
   });
