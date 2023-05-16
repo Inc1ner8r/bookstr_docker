@@ -33,7 +33,7 @@ const Books = () => {
 
   return (
     <div className="wrapper">
-      <div className="header">Book Store</div>
+      <div className="header">Book Registry</div>
       <div className="books">
         {books.map((book) => (
           <div key={book.id} className="book">
