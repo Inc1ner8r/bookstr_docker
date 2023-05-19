@@ -15,7 +15,7 @@ const db = mysql.createConnection({
 });
 
 const query =
-  "CREATE TABLE IF NOT EXISTS blogs( id int auto_increment,title varchar(255),content varchar(255), datetime DATETIME ,primary key(id));";
+  "CREATE TABLE IF NOT EXISTS blogs( id int auto_increment,title varchar(255),content text, datetime varchar(255), userid varchar(255), username varchar(255) ,primary key(id));";
 db.query(query);
 const userQuery =
   "CREATE TABLE IF NOT EXISTS users( id int auto_increment,username varchar(255),email varchar(255),password varchar(255),primary key(id));";
@@ -45,6 +45,16 @@ app.get("/blogs", (req, res) => {
   });
 });
 
+app.get("/blogs/:id", (req, res) => {
+  const userid = req.params.id;
+  const q = "SELECT * FROM blogs WHERE userid = ? ";
+
+  db.query(q, [userid], (err, data) => {
+    if (err) return res.send(err);
+    return res.json(data);
+  });
+});
+
 // app.post("/books", (req, res) => {
 //   const q =
 //     "INSERT INTO books(`title`, `description`, `price`, `cover`) VALUES (?)";
@@ -62,9 +72,16 @@ app.get("/blogs", (req, res) => {
 //   });
 // });
 app.post("/blog", (req, res) => {
-  const q = "INSERT INTO blogs(`title`, `content`) VALUES (?)";
+  const q =
+    "INSERT INTO blogs(`title`, `content`, `userid`, `username`, `datetime`) VALUES (?)";
 
-  const values = [req.body.title, req.body.content];
+  const values = [
+    req.body.title,
+    req.body.content,
+    req.body.userid,
+    req.body.username,
+    req.body.datetime,
+  ];
 
   db.query(q, [values], (err, data) => {
     if (err) return res.send(err);
@@ -87,6 +104,15 @@ app.post("/login", (req, res) => {
   const q = "SELECT * FROM users WHERE username = ? ";
 
   db.query(q, [req.body.username], (err, data) => {
+    if (err) return res.send(err);
+    return res.json(data);
+  });
+});
+
+app.post("/user", (req, res) => {
+  const q = "SELECT * FROM users WHERE id = ? ";
+
+  db.query(q, [req.body.id], (err, data) => {
     if (err) return res.send(err);
     return res.json(data);
   });
