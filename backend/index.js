@@ -15,7 +15,7 @@ const db = mysql.createConnection({
 });
 
 const query =
-  "CREATE TABLE IF NOT EXISTS blogs( id int auto_increment,title varchar(255),content text, datetime varchar(255), userid varchar(255), username varchar(255) ,primary key(id));";
+  "CREATE TABLE IF NOT EXISTS blogs( id int auto_increment,title varchar(255),content text, datetime varchar(255), userid varchar(255), username varchar(255), likes int, dislikes int ,primary key(id));";
 db.query(query);
 const userQuery =
   "CREATE TABLE IF NOT EXISTS users( id int auto_increment,username varchar(255),email varchar(255),password varchar(255),primary key(id));";
@@ -73,7 +73,7 @@ app.get("/blogs/:id", (req, res) => {
 // });
 app.post("/blog", (req, res) => {
   const q =
-    "INSERT INTO blogs(`title`, `content`, `userid`, `username`, `datetime`) VALUES (?)";
+    "INSERT INTO blogs(`title`, `content`, `userid`, `username`, `datetime`,`likes`,`dislikes`) VALUES (?)";
 
   const values = [
     req.body.title,
@@ -81,6 +81,8 @@ app.post("/blog", (req, res) => {
     req.body.userid,
     req.body.username,
     req.body.datetime,
+    0,
+    0,
   ];
 
   db.query(q, [values], (err, data) => {
@@ -138,6 +140,35 @@ app.delete("/blogs/:id", (req, res) => {
   });
 });
 
+// Route for updating like count
+app.put("/likes/:id", (req, res) => {
+  const postId = req.params.id;
+
+  // Update the like count in the database for the specified post
+  db.query(
+    "UPDATE blogs SET likes = likes + 1 WHERE id = ?",
+    [postId],
+    (error, results) => {
+      if (error) throw error;
+      res.sendStatus(200);
+    }
+  );
+});
+
+// Route for updating dislike count
+app.put("/dislikes/:id", (req, res) => {
+  const postId = req.params.id;
+
+  // Update the dislike count in the database for the specified post
+  db.query(
+    "UPDATE blogs SET dislikes = dislikes + 1 WHERE id = ?",
+    [postId],
+    (error, results) => {
+      if (error) throw error;
+      res.sendStatus(200);
+    }
+  );
+});
 // app.put("/blogs/:id", (req, res) => {
 //   const bookId = req.params.id;
 //   const q =
